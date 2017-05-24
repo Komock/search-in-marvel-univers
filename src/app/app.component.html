@@ -1,0 +1,31 @@
+<div class="logo"><img src="assets/images/marvel_logo.svg" alt="logo"></div>
+<div class="search-field">
+	<md-input-container>
+		<input mdInput placeholder="Enter hero name..." class="search-field__input" (input)="inputStream($event.target)">
+	</md-input-container>
+	<p class="search-field__example">Example: "Wolverine", "Iron Man", "Thor", "Daredevil" etc</p>
+</div>
+<div class="container">
+	<div class="wrap">
+		<md-spinner class="spinner" *ngIf="searchInProgress"></md-spinner>
+		<div class="no-results" *ngIf="noResults">No results(</div>
+		<masonry class="grid" [useImagesLoaded]="true">
+			<masonry-brick class="hero" *ngFor="let hero of heroes">
+				<md-card class="hero__inner">
+					<img md-card-image src="{{hero.thumbnail.path + '.' + hero.thumbnail.extension}}">
+					<md-card-content>
+						<h3>{{hero.name}}</h3>
+					</md-card-content>
+					<md-card-actions>
+						<a md-button color="accent" href="{{hero.urls[0].url}}" target="_blank">{{ hero.urls[0].type | titlecase }}</a>						
+					</md-card-actions>
+				</md-card>
+			</masonry-brick>
+		</masonry>
+	</div>
+</div>
+<footer>
+	<div class="wrap">
+		<a href="http://marvel.com">Data provided by Marvel. © 2017 MARVEL</a>
+	</div>
+</footer>
