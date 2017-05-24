@@ -16,11 +16,11 @@ export class AppComponent implements OnInit {
 	public searchInProgress: boolean = false;
 	public noResults: boolean = false;
 	public heroes: Hero[] = [];
+	private lastQuery: string = '';
 
 	// Input Subject
 	public inputSubject$$: Subject<string> = new Subject<string>();
 	public inputStream(input: HTMLInputElement): void{
-		this.searchInProgress = true;
 		this.noResults = false;
 		this.inputSubject$$.next(input.value);
 	}
@@ -33,6 +33,10 @@ export class AppComponent implements OnInit {
 		this.inputSubject$$
 			.debounceTime(700)
 			.switchMap((searchQuery:string)=>{
+				this.lastQuery = searchQuery;
+				if (searchQuery !== '') {
+					this.searchInProgress = true;
+				}
 				if (searchQuery === ''){
 					return Observable.of({data:{
 						results:[]
@@ -43,7 +47,7 @@ export class AppComponent implements OnInit {
 				let results = data.data.results;
 				this.heroes = results;
 				this.searchInProgress = false;
-				if (results.length === 0) {
+				if (results.length === 0 && this.lastQuery !== '') {
 					this.noResults = true;
 				}
 			});
